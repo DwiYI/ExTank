@@ -1,29 +1,35 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
 #include "MyTank.h"
+#include "TankAimComponent.h"
+
 
 
 // Sets default values
 AMyTank::AMyTank()
 {
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
+	TankAimComponent = CreateDefaultSubobject<UTankAimComponent>(FName("Aim Component"));
 }
 
-// Called when the game starts or when spawned
-void AMyTank::BeginPlay()
+void AMyTank::AimAt(FVector aim)
 {
-	Super::BeginPlay();
-	
+	TankAimComponent->AimAt(aim, LaunchSpeed);
 }
 
-// Called every frame
-void AMyTank::Tick(float DeltaTime)
+void AMyTank::SetBarrelReferences(UTankBarrel * BarrelToSet)
 {
-	Super::Tick(DeltaTime);
-
+	TankAimComponent->SetBarrelReferences(BarrelToSet);
 }
+
+void AMyTank::SetTurretReferences(UTankTurret * TurretToSet)
+{
+	TankAimComponent->SetTurretReferences(TurretToSet);
+}
+
+void AMyTank::Fire()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Fire !!"));
+}
+
 
 // Called to bind functionality to input
 void AMyTank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

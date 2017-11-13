@@ -2,9 +2,12 @@
 
 #pragma once
 
+
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "MyTank.generated.h"
+
+class UTankAimComponent;
 
 UCLASS()
 class TANK_API AMyTank : public APawn
@@ -14,18 +17,27 @@ class TANK_API AMyTank : public APawn
 public:
 	// Sets default values for this pawn's properties
 	AMyTank();
+	void AimAt(FVector aim);
+
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void SetBarrelReferences(UTankBarrel* BarelToSet);
+
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void SetTurretReferences(UTankTurret* TurretToSet);
+
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void Fire();
+
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+
+	UTankAimComponent* TankAimComponent = nullptr;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	
+	UPROPERTY(EditAnywhere, Category = Firing)
+	float LaunchSpeed = 10000.0f;
 	
 };

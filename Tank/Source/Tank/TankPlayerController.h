@@ -2,10 +2,12 @@
 
 #pragma once
 
-#include "MyTank.h"
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
+
+
+class AMyTank;
 
 /**
  * 
@@ -19,5 +21,19 @@ class TANK_API ATankPlayerController : public APlayerController
 public:
 	AMyTank* GetControlledTank() const;
 	virtual void BeginPlay() override;
-	
+	virtual void Tick(float DeltaTime) override;
+	void AimTowardCrosshair();
+	bool GetSightRayHitLocation(FVector &OutHitLocation) const;
+	bool GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const;
+
+	bool GetLookVectorHitLocation(FVector& LookDirection, FVector& OutHitLocation) const;
+
+	UPROPERTY(EditAnywhere)
+	float CrossHairXLocation = .5f;
+
+	UPROPERTY(EditAnywhere)
+	float CrossHairYLocation = .333333f;
+
+	UPROPERTY(EditAnywhere)
+	float LineTraceRange = 100000.0f;
 };

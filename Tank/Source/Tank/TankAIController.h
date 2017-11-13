@@ -2,11 +2,14 @@
 
 #pragma once
 
-#include "MyTank.h"
+
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "Engine/World.h"
+
 #include "TankAIController.generated.h"
+
+
+class AMyTank;
 
 /**
  * 
@@ -20,6 +23,7 @@ class TANK_API ATankAIController : public AAIController
 	
 public:
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
 	AMyTank* GetControlledTank() const;
 	AMyTank* GetPlayerTank() const;
 };
