@@ -46,5 +46,6 @@ public:
 
 private:
 	UTankBarrel* Barrel = nullptr;
-	
+	float FireRatePerSecond = 3;
+	float LastFireTime = 0;
 };

@@ -29,11 +29,16 @@ void AMyTank::SetTurretReferences(UTankTurret * TurretToSet)
 
 void AMyTank::Fire()
 {
-	if (!Barrel) return;
-	FVector LocationSpawn = Barrel->GetSocketLocation(FName("Projectile"));
-	FRotator Rotation = Barrel->GetSocketRotation(FName("Projectile"));
-	AProjectile *ProjectileSpawn = GetWorld()->SpawnActor<AProjectile>(Projectile, LocationSpawn, Rotation);
-	ProjectileSpawn->LaunchProjectile(LaunchSpeed);
+	bool IsReloaded = (GetWorld()->GetTimeSeconds() - FireRatePerSecond) > LastFireTime;
+
+	if (Barrel && IsReloaded)
+	{
+		FVector LocationSpawn = Barrel->GetSocketLocation(FName("Projectile"));
+		FRotator Rotation = Barrel->GetSocketRotation(FName("Projectile"));
+		AProjectile *ProjectileSpawn = GetWorld()->SpawnActor<AProjectile>(Projectile, LocationSpawn, Rotation);
+		ProjectileSpawn->LaunchProjectile(LaunchSpeed);
+		LastFireTime = GetWorld()->GetTimeSeconds();
+	}
 
 }
 
