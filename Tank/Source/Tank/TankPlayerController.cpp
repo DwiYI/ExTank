@@ -14,16 +14,6 @@ AMyTank* ATankPlayerController::GetControlledTank() const
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	FString result = "";
-
-	if (GetControlledTank())
-	{
-		result = GetControlledTank()->GetName();
-		UE_LOG(LogTemp, Warning, TEXT("Begin Play : %s"), *result);
-	}
-
-	
 }
 
 void ATankPlayerController::Tick(float DeltaTime)
@@ -54,7 +44,6 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 	
 	if (GetLookDirection(ScreenLocation, LookDirection))
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("Look at : %s"), *(LookDirection.ToString()));
 		GetLookVectorHitLocation(LookDirection, OutHitLocation);
 	}
 
