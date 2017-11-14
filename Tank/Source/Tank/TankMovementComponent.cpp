@@ -34,7 +34,7 @@ void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, boo
 	float ThrowForward = FVector::DotProduct(TankForward, AiForwardIntention);
 
 	float ThrowTurn = FVector::CrossProduct(TankForward, AiForwardIntention).Z;
-	UE_LOG(LogTemp, Warning, TEXT(" z turn at %f"), ThrowTurn);
+	UE_LOG(LogTemp, Warning, TEXT(" z turn %f at %f"), ThrowForward, ThrowTurn);
 	IntentMoveForward(ThrowForward);
 	IntentMoveTurn(ThrowTurn);
 }

@@ -19,7 +19,9 @@ class TANK_API ATankPlayerController : public APlayerController
 	
 	
 public:
+	UFUNCTION(BlueprintCallable, Category = Setup)
 	AMyTank* GetControlledTank() const;
+
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 	void AimTowardCrosshair();
