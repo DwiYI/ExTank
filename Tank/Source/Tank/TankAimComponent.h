@@ -26,8 +26,7 @@ class TANK_API UTankAimComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UTankAimComponent();
-	void SetBarrelReferences(UTankBarrel* BarrelToSet);
-	void SetTurretReferences(UTankTurret* TankToSet);
+	void Initialize(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet);
 	void AimAt(FVector HitLocation, float LaunchSpeed);
 
 protected:

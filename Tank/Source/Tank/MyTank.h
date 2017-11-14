@@ -8,7 +8,9 @@
 #include "MyTank.generated.h"
 
 class UTankAimComponent;
+class UTankMovementComponent;
 class AProjectile;
+class UTankTrack;
 
 UCLASS()
 class TANK_API AMyTank : public APawn
@@ -20,21 +22,23 @@ public:
 	AMyTank();
 	void AimAt(FVector aim);
 
+	// Set Barrel And Turret And Aim Component
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetBarrelReferences(UTankBarrel* BarelToSet);
-
+	void InitializeTankAim(UTankBarrel* BarelToSet, UTankTurret* TurretToSet, UTankAimComponent* TankAimComponentToSet);
+	
+	// Set Track And Move Component
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetTurretReferences(UTankTurret* TurretToSet);
+	void InitializeTankMove(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet, UTankMovementComponent* TankMovementComponentToSet);
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void Fire();
-
 
 protected:
 
 	UPROPERTY(BlueprintReadOnly)
 	UTankAimComponent* TankAimComponent = nullptr;
 
+	UTankMovementComponent* TankMovementComponent = nullptr;
 
 public:	
 	// Called to bind functionality to input

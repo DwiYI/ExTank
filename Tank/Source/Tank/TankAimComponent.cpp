@@ -15,16 +15,11 @@ UTankAimComponent::UTankAimComponent()
 }
 
 
-void UTankAimComponent::SetBarrelReferences(UTankBarrel * BarrelToSet)
+void UTankAimComponent::Initialize(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet)
 {
-	if (!BarrelToSet) { return; }
+	if (!BarrelToSet || !TurretToSet) { return; }
 	Barrel = BarrelToSet;
-}
-
-void UTankAimComponent::SetTurretReferences(UTankTurret * TankToSet)
-{
-	if (!TankToSet) { return; }
-	Turret = TankToSet;
+	Turret = TurretToSet;
 }
 
 

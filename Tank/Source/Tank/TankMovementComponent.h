@@ -19,7 +19,7 @@ class TANK_API UTankMovementComponent : public UNavMovementComponent
 
 
 public:
-	UFUNCTION(BlueprintCallable, Category = Setup)
+
 	void Initialize(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet);
 
 	UFUNCTION(BlueprintCallable, Category = Movement)
