@@ -9,43 +9,30 @@
 // Sets default values
 AMyTank::AMyTank()
 {
-	
+	TankAimComponent = FindComponentByClass<UTankAimComponent>();
 }
 
 void AMyTank::AimAt(FVector aim)
 {
+	if (!TankAimComponent) return;
 	TankAimComponent->AimAt(aim, LaunchSpeed);
 }
 
 
-void AMyTank::InitializeTankAim(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet, UTankAimComponent * TankAimComponentToSet)
-{
-	if (!BarrelToSet || !TurretToSet || !TankAimComponentToSet) { return; }
-	TankAimComponent = TankAimComponentToSet;
-	TankAimComponent->Initialize(BarrelToSet, TurretToSet);
-	Barrel = BarrelToSet;
-}
-
-void AMyTank::InitializeTankMove(UTankTrack * LeftTrackToSet, UTankTrack * RightTrackToSet, UTankMovementComponent* TankMovementComponentToSet)
-{
-	if (!LeftTrackToSet || !RightTrackToSet || !TankMovementComponentToSet) { return; }
-	TankMovementComponent = TankMovementComponentToSet;
-	TankMovementComponent->Initialize(LeftTrackToSet, RightTrackToSet);
-}
-
 void AMyTank::Fire()
 {
-	bool IsReloaded = (GetWorld()->GetTimeSeconds() - FireRatePerSecond) > LastFireTime;
+	//if (!ensure(Barrel)) return;
+	//bool IsReloaded = (GetWorld()->GetTimeSeconds() - FireRatePerSecond) > LastFireTime;
 
-	if (Barrel && IsReloaded)
-	{
-		FVector LocationSpawn = Barrel->GetSocketLocation(FName("Projectile"));
-		FRotator Rotation = Barrel->GetSocketRotation(FName("Projectile"));
-		AProjectile *ProjectileSpawn = GetWorld()->SpawnActor<AProjectile>(Projectile, LocationSpawn, Rotation);
-		ProjectileSpawn->LaunchProjectile(LaunchSpeed);
-		LastFireTime = GetWorld()->GetTimeSeconds();
-	}
-
+	//if (IsReloaded)
+	//{
+	//	FVector LocationSpawn = Barrel->GetSocketLocation(FName("Projectile"));
+	//	FRotator Rotation = Barrel->GetSocketRotation(FName("Projectile"));
+	//	AProjectile *ProjectileSpawn = GetWorld()->SpawnActor<AProjectile>(Projectile, LocationSpawn, Rotation);
+	//	ProjectileSpawn->LaunchProjectile(LaunchSpeed);
+	//	LastFireTime = GetWorld()->GetTimeSeconds();
+	//}
+	return;
 }
 
 

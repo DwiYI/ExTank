@@ -22,14 +22,6 @@ public:
 	AMyTank();
 	void AimAt(FVector aim);
 
-	// Set Barrel And Turret And Aim Component
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	void InitializeTankAim(UTankBarrel* BarelToSet, UTankTurret* TurretToSet, UTankAimComponent* TankAimComponentToSet);
-	
-	// Set Track And Move Component
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	void InitializeTankMove(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet, UTankMovementComponent* TankMovementComponentToSet);
-
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void Fire();
 
@@ -51,7 +43,6 @@ public:
 	TSubclassOf<AProjectile> Projectile;
 
 private:
-	UTankBarrel* Barrel = nullptr;
 	float FireRatePerSecond = 3;
 	float LastFireTime = 0;
 };
