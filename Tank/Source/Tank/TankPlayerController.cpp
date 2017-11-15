@@ -3,7 +3,7 @@
 #include "TankPlayerController.h"
 #include "Engine/World.h"
 #include "MyTank.h"
-
+#include "TankAimComponent.h"
 
 
 AMyTank* ATankPlayerController::GetControlledTank() const
@@ -14,6 +14,11 @@ AMyTank* ATankPlayerController::GetControlledTank() const
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+	TankAimComponent = GetControlledTank()->FindComponentByClass<UTankAimComponent>();
+	if (TankAimComponent)
+	{
+		FoundAimingComponent(TankAimComponent);
+	}
 }
 
 void ATankPlayerController::Tick(float DeltaTime)
@@ -28,8 +33,7 @@ void ATankPlayerController::AimTowardCrosshair()
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation))
 	{
-		GetControlledTank()->AimAt(HitLocation);
-		
+		TankAimComponent->AimAt(HitLocation);
 	}
 
 }

@@ -8,7 +8,7 @@
 
 
 class AMyTank;
-
+class UTankAimComponent;
 /**
  * 
  */
@@ -17,18 +17,14 @@ class TANK_API ATankPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
-	
+
+
+protected:
+	UFUNCTION(BlueprintImplementableEvent, Category = Setup)
+	void FoundAimingComponent(UTankAimComponent* AimCompRef);
 public:
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	AMyTank* GetControlledTank() const;
-
-	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaTime) override;
-	void AimTowardCrosshair();
-	bool GetSightRayHitLocation(FVector &OutHitLocation) const;
-	bool GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const;
-
-	bool GetLookVectorHitLocation(FVector& LookDirection, FVector& OutHitLocation) const;
 
 	UPROPERTY(EditAnywhere)
 	float CrossHairXLocation = .5f;
@@ -38,4 +34,14 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float LineTraceRange = 100000.0f;
+
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
+	void AimTowardCrosshair();
+	bool GetSightRayHitLocation(FVector &OutHitLocation) const;
+	bool GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const;
+	bool GetLookVectorHitLocation(FVector& LookDirection, FVector& OutHitLocation) const;
+
+private:
+	UTankAimComponent* TankAimComponent = nullptr;
 };
