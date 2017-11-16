@@ -7,7 +7,6 @@
 #include "TankPlayerController.generated.h"
 
 
-class AMyTank;
 class UTankAimComponent;
 /**
  * 
@@ -23,8 +22,6 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = Setup)
 	void FoundAimingComponent(UTankAimComponent* AimCompRef);
 public:
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	AMyTank* GetControlledTank() const;
 
 	UPROPERTY(EditAnywhere)
 	float CrossHairXLocation = .5f;

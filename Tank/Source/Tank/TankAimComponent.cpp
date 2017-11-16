@@ -13,7 +13,7 @@ UTankAimComponent::UTankAimComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
 }
 
 
@@ -47,7 +47,7 @@ void UTankAimComponent::AimAt(FVector HitLocation)
 	if(bAimSolution)
 	{
 		FVector AimDirection = OutLaunchVelocity.GetSafeNormal();
-		FString name = GetOwner()->GetName();
+		AimDirectionOwner = AimDirection;
 		MoveBarrelToward(AimDirection);
 	}
 	
@@ -55,17 +55,20 @@ void UTankAimComponent::AimAt(FVector HitLocation)
 
 void UTankAimComponent::Fire()
 {
-	if (!ensure(Barrel)) return;
-	bool IsReloaded = (GetWorld()->GetTimeSeconds() - FireRatePerSecond) > LastFireTime;
-
-	if (IsReloaded)
+	if (Status != EFiringStatus::Reloading)
 	{
+		if (!ensure(Barrel && Projectile)) return;
 		FVector LocationSpawn = Barrel->GetSocketLocation(FName("Projectile"));
 		FRotator Rotation = Barrel->GetSocketRotation(FName("Projectile"));
 		AProjectile *ProjectileSpawn = GetWorld()->SpawnActor<AProjectile>(Projectile, LocationSpawn, Rotation);
 		ProjectileSpawn->LaunchProjectile(LaunchSpeed);
 		LastFireTime = GetWorld()->GetTimeSeconds();
 	}
+}
+
+void UTankAimComponent::BeginPlay()
+{
+	LastFireTime = GetWorld()->GetTimeSeconds();
 }
 
 void UTankAimComponent::MoveBarrelToward(FVector AimDirection)
@@ -75,5 +78,26 @@ void UTankAimComponent::MoveBarrelToward(FVector AimDirection)
 	FRotator DeltaRotator = AimRotator - BarrelRotator;
 	Barrel->Elevate(DeltaRotator.Pitch);
 	Turret->Rotate(DeltaRotator.Yaw);
+}
+
+bool UTankAimComponent::IsBarrelMoving()
+{
+	return  !(Barrel->GetForwardVector()).Equals(AimDirectionOwner, 0.1f);
+}
+
+void UTankAimComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
+{
+	if ((GetWorld()->GetTimeSeconds() - LastFireTime ) < FireRatePerSecond)
+	{
+		Status = EFiringStatus::Reloading;
+	}
+	else if (IsBarrelMoving())
+	{
+		Status = EFiringStatus::Aiming;
+	}
+	else
+	{
+		Status = EFiringStatus::Locked;
+	}
 }
 

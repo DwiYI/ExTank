@@ -9,8 +9,6 @@
 #include "TankAIController.generated.h"
 
 
-class AMyTank;
-
 /**
  * 
  */

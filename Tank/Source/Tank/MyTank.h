@@ -7,10 +7,6 @@
 #include "GameFramework/Pawn.h"
 #include "MyTank.generated.h"
 
-class UTankAimComponent;
-class UTankMovementComponent;
-class AProjectile;
-class UTankTrack;
 
 UCLASS()
 class TANK_API AMyTank : public APawn

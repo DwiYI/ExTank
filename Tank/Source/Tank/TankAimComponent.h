@@ -42,6 +42,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void Fire();
 
+	virtual void BeginPlay() override;
+
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = Color)
 	EFiringStatus Status = EFiringStatus::Reloading;
@@ -52,4 +57,6 @@ private:
 	void MoveBarrelToward(FVector AimDirection);
 	float FireRatePerSecond = 3;
 	float LastFireTime = 0;
+	FVector AimDirectionOwner;
+	bool IsBarrelMoving();
 };
