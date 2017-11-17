@@ -21,7 +21,8 @@ class TANK_API ATankAIController : public AAIController
 
 public:
 	virtual void Tick(float DeltaTime) override;
-	
+
+protected:
 	UPROPERTY(EditAnywhere, Category = ArtificialMovement)
 	float AcceptanceRadius = 3000;
 };

@@ -55,7 +55,8 @@ void UTankAimComponent::AimAt(FVector HitLocation)
 
 void UTankAimComponent::Fire()
 {
-	if (Status != EFiringStatus::Reloading)
+
+	if (!IsAmmoEmpty() && (Status == EFiringStatus::Locked || Status ==  EFiringStatus::Aiming))
 	{
 		if (!ensure(Barrel && Projectile)) return;
 		FVector LocationSpawn = Barrel->GetSocketLocation(FName("Projectile"));
@@ -63,6 +64,7 @@ void UTankAimComponent::Fire()
 		AProjectile *ProjectileSpawn = GetWorld()->SpawnActor<AProjectile>(Projectile, LocationSpawn, Rotation);
 		ProjectileSpawn->LaunchProjectile(LaunchSpeed);
 		LastFireTime = GetWorld()->GetTimeSeconds();
+		Ammo--;
 	}
 }
 
@@ -77,7 +79,15 @@ void UTankAimComponent::MoveBarrelToward(FVector AimDirection)
 	FRotator BarrelRotator = Barrel->GetForwardVector().Rotation();
 	FRotator DeltaRotator = AimRotator - BarrelRotator;
 	Barrel->Elevate(DeltaRotator.Pitch);
-	Turret->Rotate(DeltaRotator.Yaw);
+
+	if (FMath::Abs(DeltaRotator.Yaw) < 180)
+	{
+		Turret->Rotate(DeltaRotator.Yaw);
+	}
+	else
+	{
+		Turret->Rotate(-DeltaRotator.Yaw);
+	}
 }
 
 bool UTankAimComponent::IsBarrelMoving()
@@ -85,9 +95,18 @@ bool UTankAimComponent::IsBarrelMoving()
 	return  !(Barrel->GetForwardVector()).Equals(AimDirectionOwner, 0.1f);
 }
 
+bool UTankAimComponent::IsAmmoEmpty()
+{
+	return (Ammo <= 0);
+}
+
 void UTankAimComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
 {
-	if ((GetWorld()->GetTimeSeconds() - LastFireTime ) < FireRatePerSecond)
+	if (IsAmmoEmpty())
+	{
+		Status = EFiringStatus::NOAMMO;
+	}
+	else if ((GetWorld()->GetTimeSeconds() - LastFireTime ) < FireRatePerSecond)
 	{
 		Status = EFiringStatus::Reloading;
 	}
@@ -95,9 +114,19 @@ void UTankAimComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	{
 		Status = EFiringStatus::Aiming;
 	}
-	else
+	else 
 	{
 		Status = EFiringStatus::Locked;
 	}
+}
+
+EFiringStatus UTankAimComponent::GetFiringStatus() const
+{
+	return Status;
+}
+
+int UTankAimComponent::GetAmmo() const
+{
+	return Ammo;
 }
 

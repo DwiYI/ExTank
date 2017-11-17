@@ -12,7 +12,8 @@ enum class EFiringStatus : uint8
 {
 	Locked,
 	Aiming,
-	Reloading
+	Reloading,
+	NOAMMO
 };
 
 class UTankBarrel;
@@ -46,6 +47,10 @@ public:
 
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 
+	EFiringStatus GetFiringStatus() const;
+
+	UFUNCTION(BlueprintCallable, Category = Ammo)
+	int GetAmmo() const;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = Color)
@@ -59,4 +64,10 @@ private:
 	float LastFireTime = 0;
 	FVector AimDirectionOwner;
 	bool IsBarrelMoving();
+
+	UPROPERTY(EditAnywhere, Category = Color)
+	int Ammo = 3;
+
+	bool IsAmmoEmpty();
+
 };
