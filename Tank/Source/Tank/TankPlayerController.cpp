@@ -3,8 +3,24 @@
 #include "TankPlayerController.h"
 #include "Engine/World.h"
 #include "TankAimComponent.h"
+#include "MyTank.h"
 
 
+void ATankPlayerController::SetPawn(APawn * InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (InPawn)
+	{
+		auto TankPosses = Cast<AMyTank>(InPawn);
+		if (!TankPosses) return;
+		TankPosses->OnDeath.AddUniqueDynamic(this, &ATankPlayerController::OnTankDeath);
+	}
+}
+
+void ATankPlayerController::OnTankDeath()
+{
+	StartSpectatingOnly();
+}
 
 void ATankPlayerController::BeginPlay()
 {

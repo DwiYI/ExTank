@@ -5,7 +5,10 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/PrimitiveComponent.h"
-
+#include "PhysicsEngine/RadialForceComponent.h"
+#include "Engine/World.h"
+#include "TimerManager.h"
+#include "Kismet/GameplayStatics.h"
 // Sets default values
 AProjectile::AProjectile()
 {
@@ -27,7 +30,8 @@ AProjectile::AProjectile()
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Projectile Componenet"));
 	ProjectileMovement->bAutoActivate = false;
 
-
+	ForceExplosion = CreateDefaultSubobject<URadialForceComponent>(FName("Force Explosion Componenet"));
+	ForceExplosion->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	
 }
 
@@ -49,6 +53,16 @@ void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor,
 {
 	LaunchBlast->Deactivate();
 	ImpactBlast->Activate();
-	UE_LOG(LogTemp, Warning, TEXT("Jalan"));
+	ForceExplosion->FireImpulse();
+	SetRootComponent(ImpactBlast);
+	CollisionMesh->DestroyComponent();
+	UGameplayStatics::ApplyRadialDamage(this, HitDamage, GetActorLocation(), ForceExplosion->Radius,UDamageType::StaticClass(), TArray<AActor*>());
+	FTimerHandle Timer;
+	GetWorld()->GetTimerManager().SetTimer(Timer, this, &AProjectile::OnTimerDestroy, TimerDelay, false);
+}
+
+void AProjectile::OnTimerDestroy()
+{
+	Destroy();
 }
 

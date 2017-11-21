@@ -7,6 +7,7 @@
 #include "TankPlayerController.generated.h"
 
 
+class AMyTank;
 class UTankAimComponent;
 /**
  * 
@@ -31,6 +32,11 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float LineTraceRange = 100000.0f;
+
+	virtual void SetPawn(APawn* InPawn) override;
+
+	UFUNCTION()
+	void OnTankDeath();
 
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;

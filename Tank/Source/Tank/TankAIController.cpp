@@ -2,7 +2,7 @@
 #include "TankAIController.h"
 #include "Engine/World.h"
 #include "TankAimComponent.h"
-
+#include "MyTank.h"
 
 void ATankAIController::Tick(float DeltaTime)
 {
@@ -21,3 +21,20 @@ void ATankAIController::Tick(float DeltaTime)
 	}
 }
 
+void ATankAIController::SetPawn(APawn * InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (InPawn)
+	{
+		auto TankPosses = Cast<AMyTank>(InPawn);
+		if (!TankPosses) return;
+		TankPosses->OnDeath.AddUniqueDynamic(this, &ATankAIController::OnTankDeath);
+	}
+}
+
+void ATankAIController::OnTankDeath()
+{
+	if (!GetPawn()) return;
+	GetPawn()->DetachFromControllerPendingDestroy();
+
+}

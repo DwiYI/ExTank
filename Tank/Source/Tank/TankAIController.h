@@ -8,7 +8,6 @@
 
 #include "TankAIController.generated.h"
 
-
 /**
  * 
  */
@@ -21,6 +20,11 @@ class TANK_API ATankAIController : public AAIController
 
 public:
 	virtual void Tick(float DeltaTime) override;
+
+	virtual void SetPawn(APawn* InPawn) override;
+
+	UFUNCTION()
+	void OnTankDeath();
 
 protected:
 	UPROPERTY(EditAnywhere, Category = ArtificialMovement)
